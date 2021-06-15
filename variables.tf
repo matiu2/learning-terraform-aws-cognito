@@ -27,3 +27,10 @@ variable "destination_bucket" {
   type        = string
   default     = null
 }
+
+// The google app client id that you create from following
+// https://github.com/acantril/learn-cantrill-io-labs/blob/master/aws-cognito-web-identity-federation/02_LABINSTRUCTIONS/STAGE2%20-%20Create%20Google%20APIProject%20and%20Client%20ID.md
+variable "google_client_id" {
+  description = "The client-id key you got from registering your google oauth project"
+  type        = string
+}
