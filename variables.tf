@@ -2,6 +2,10 @@ variable "region" {
   type        = string
   description = "AWS Region"
   default     = "us-east-1"
+  validation {
+    condition     = var.region == "us-east-1"
+    error_message = "Currently only us-east-1 is supported because we copy objects from an s3 bucket in us-east-1."
+  }
 }
 
 variable "source_bucket" {
