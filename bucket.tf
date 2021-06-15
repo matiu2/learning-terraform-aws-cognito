@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "private_bucket" {
+resource "aws_s3_bucket" "app_bucket" {
   bucket = local.bucket_name
   acl    = "public-read"
 
@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "private_bucket" {
 }
 
 resource "aws_s3_bucket_policy" "read-all" {
-  bucket = aws_s3_bucket.private_bucket.id
+  bucket = aws_s3_bucket.app_bucket.id
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression's result to valid JSON syntax.
@@ -29,8 +29,8 @@ resource "aws_s3_bucket_policy" "read-all" {
         Principal = "*"
         Action    = ["s3:ListBucket", "s3:GetObject"]
         Resource = [
-          aws_s3_bucket.private_bucket.arn,
-          "${aws_s3_bucket.private_bucket.arn}/*",
+          aws_s3_bucket.app_bucket.arn,
+          "${aws_s3_bucket.app_bucket.arn}/*",
         ]
       },
     ]
@@ -46,7 +46,7 @@ data "aws_s3_bucket_objects" "app" {
 
 resource "aws_s3_object_copy" "app" {
   count  = length(data.aws_s3_bucket_objects.app.keys)
-  bucket = aws_s3_bucket.private_bucket.bucket
+  bucket = aws_s3_bucket.app_bucket.bucket
   key    = data.aws_s3_bucket_objects.app.keys[count.index]
   source = "${var.source_bucket}/${data.aws_s3_bucket_objects.app.keys[count.index]}"
 }
@@ -60,7 +60,7 @@ data "aws_s3_bucket_objects" "patches" {
 
 resource "aws_s3_object_copy" "patches" {
   count  = length(data.aws_s3_bucket_objects.app.keys)
-  bucket = aws_s3_bucket.private_bucket.bucket
+  bucket = aws_s3_bucket.app_bucket.bucket
   key    = data.aws_s3_bucket_objects.patches.keys[count.index]
   source = "${var.source_bucket}/${data.aws_s3_bucket_objects.patches.keys[count.index]}"
 }
