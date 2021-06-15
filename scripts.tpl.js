@@ -23,7 +23,7 @@ function signInCallback(authResult) {
   if (authResult['access_token']) {
 
     // adding google access token to Cognito credentials login map
-    AWS.config.region = 'us-east-1';
+    AWS.config.region = '${region}';
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: '${identity_pool_id}', // MAKE SURE YOU REPLACE THIS
       Logins: {

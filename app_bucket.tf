@@ -42,8 +42,10 @@ resource "aws_s3_bucket_object" "index_html" {
 resource "aws_s3_bucket_object" "scripts" {
   bucket = aws_s3_bucket.app_bucket.id
   key = "scripts.js"
-  content = templatefile("scripts.tpl.js", {identity_pool_id = aws_cognito_identity_pool.id_pool.id
-private_bucket_name = local.private_bucket_name
+  content = templatefile("scripts.tpl.js", {
+    identity_pool_id = aws_cognito_identity_pool.id_pool.id
+    private_bucket_name = local.private_bucket_name
+    region = var.region
   })
   content_type = "text/javascript"
 }
